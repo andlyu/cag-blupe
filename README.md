@@ -2,7 +2,7 @@
 
 [Open the website](https://cag-molmoact-blupe.andlyu.chatgpt.site/) to run MolmoAct2 baseline or MolmoAct2 + CAG-inspired guidance on the physical YAM1 arms. Confirm the editable name/email, select a task and Run. Guided mode and a 60-second run are the defaults. Stop, queue admission and native hardware limits remain in the existing BluPe controller.
 
-**Physical execution and immediate replay work. Full harness completion remains open: 12 of 15 requirements are verified.** The strict site-entry timing target, every-run timing requirement and public visibility remain unchecked. See the [complete checklist and historical evidence](COMPLETION-CHECKLIST.md).
+**Physical execution and immediate replay work. Full harness completion remains open: 13 of 15 requirements are verified.** The strict site-entry and every-run timing requirements remain unchecked; the website and reviewed source are public. See the [complete checklist and historical evidence](COMPLETION-CHECKLIST.md).
 
 The final cold-start test on October 31, 2026 UTC, as Andrew, completed 12 action packets and 165 waypoint progress events. Its actual live-camera replay was playable 57 ms after the browser observed completion, and remained playable after reload. A previous run's retained native recording also played. Box-placement success and improved completion from guidance have not been established.
 
@@ -33,10 +33,17 @@ Person-initiated runs retain the person's confirmed name. Assistant-operated ver
 
 ## Deployment and validation
 
-The existing owner-private Sites audience is preserved. Automatic approval review rejected making this exact Site public because an explicit audience/project authorization was missing. The proposed public companion repository is empty; no public companion source push was performed. Credentials and contact details are excluded from this source checkout.
+The website and this reviewed source are public at Andrew’s explicit request. Earlier automatic denials were resolved by his task-specific publication instruction; native Sites access is public, policy revision2. Credentials, private email, logs and recordings are excluded from this source checkout. The native Site source remains independently versioned; shared runtime and checkpoint pins below are identical.
 
 The Sites Worker forwards only allowlisted runner cookies/CSRF headers through a server-keyed `/cag-site/` route. Sites account credentials are not forwarded. The dedicated `blupe-cag` Python service loads the exact locked shared checkout and uses private server-side credentials. Main playground and robot services are not restarted for CAG deployments.
 
 Focused validation: 87 Python tests and 343 browser checks passed. The broader suite reported 1,464 passed, 28 skipped and 11 failures: ten known ASPIRE baseline failures plus a missing Node PATH in the test environment. The transport test passed when rerun with Node on PATH. This is not an all-green repository suite.
 
 Historical failed trials, timing misses and superseded verification results are preserved in the checklist rather than presented as the current service state.
+
+
+## Startup delay beyond the GPU
+
+The final cold run spent14.249s launching theGPU, then16.382s before first waypoint telemetry. The main non-GPU interval was11.837s native admission/driver initialization/Home/first observation. Fresh feedback took0.828s, remaining camera capture1.670s, inference HTTP0.969s (GPU compute0.523s), and result-to-waypoint0.304s; queue admission afterGPU readiness added0.774s. Native drivers initialize sequentially and calibrate grippers on launch; a separate offline profile gives3.6s for zero-to-Home under current limits. This is not a claim that all non-GPU delay is acceptable or that strict15-second visible motion passes. No hardware safeguard was relaxed. Live video also has disclosed stream delay.
+
+A separate later native Session API disconnect paused YAM1's automatic queue after the successful test. Normal parked/readiness restoration is tracked in the follow-up receipts; do not mistake aGPU-ready state for a robot-admission guarantee.

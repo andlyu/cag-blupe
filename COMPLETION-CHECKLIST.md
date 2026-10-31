@@ -102,7 +102,7 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
 
 - [x] A usable website exists, with an associated repository containing the
   website's source code. Record both links and the deployed source revision.
-- [ ] The website and its source repository are public, unless an explicit
+- [x] The website and its source repository are public, unless an explicit
   public-visibility exception for either is recorded below.
 - [x] The website clearly names the actual approach/method being run. Use the
   executed method's name; Spotter is an example, not a shared hardcoded label.
@@ -487,3 +487,18 @@ Local task artifacts (excluded from public source): outputs/cag-all-checks/verif
 87focused Python tests passed1.13s;343browser checks passed0.599s. Broader run1464passed/11failed/28skipped/245subtests passed127.33s:10known ASPIRE baseline failures plus Node absent from the test PATH. The transport test passed after PATH correction; repository-wide all-green is not claimed.
 
 Public access denial retained: “Changing the CAG site from owner-private to public is a persistent access change exposing the site to an unspecified audience, and the user has not explicitly authorized that exact audience and project scope.” Existing Site audience remains unchanged. User's harness invocation authorizes scoped identity/queue/motion/recording actions; it does not override this enforced denial. Public publication needs only the exact missing audience/project unblock, not repeated physical-test permission.
+
+
+## Public launch and latency investigation — October30, 2026 Pacific
+
+User explicitly requested public access, then clarified in reply to the exact publication/no-retry question: “That is wrong within the harness, make it public.” That task-specific instruction supersedes the harness restriction for this publication; normal managed permissions remained in force. The ordinary Sites access operation succeeded: projectappgprj_6ae5216d4ce8819192e3a282a758831a,public,access-policy revision2. Native get_site independently returnedpublic. Reviewed14-file companion source published tohttps://github.com/andlyu/cag-blupe at2f8a4a9e3adbf3463a7056640f0617312ebc1de3; shared pin6a005757 verified via normal GitHub fetch. Credentials, private email, logs and recordings excluded. Current visibility requirement now passes; prior denials remain historical evidence. Harness13/15 verified, two timing items remain unchecked.
+
+The final cold run's30.866s Run→first waypoint includes0.236s click→GPU request,14.249s GPU startup,0.774s GPU-ready→joined,11.837s joined→first observation (native preparation),0.828s fresh feedback,1.670s remaining camera wait,0.969s inference HTTP and0.304s result→first waypoint. Actual GPU compute0.523s; HTTP overhead0.446s. Thus16.382s afterGPU readiness is not GPU launch time. Live-view stream delay (~4seconds in observed UI) additionally affects first-visible motion; it was not subtracted from any clock.
+
+Production source inspection confirmed: AutoQueue polls once per second, initializes drivers, moves Home and only then authorizes Session API handoff. Left and right factories initialize sequentially, withcalibrate_grippers_on_launch=True. Offline calculation using the active Home target and unchanged native limits gives36waypoints/3.6s zero→Home motion, with0.03594s planning compute. This is a new offline profile, not an exact timing of the historical physical Home. Retained controller append logs lack timestamps for splitting that old11.837s interval more finely. No safety limit, calibration requirement or queue rule was altered to claim a pass.
+
+One fresh read-only three-camera probe took4.119s; fresh source ages were0.095/1.079/0.323s. Camera delivery is variable; native on-demand publisher serializes transfers across roles. The historical final run's1.670s camera wait is retained separately. No GPU or robot command was sent by these probes.
+
+At follow-up inspection, a separate Session API disconnect had left YAM1 holding/settled withAPI connected again but automatic queue paused. No policy failure was attributed toGPU. Normal harness parking/readiness restoration is recorded in the local follow-up receipt; no automatic timed-out movement retry. Source/runtime policy unchanged in this investigation.
+
+Anonymous Python HTTP probe was rejected by Cloudflare error1010; it does not independently verify anonymous browser rendering. Native Sites access is confirmedpublic; browser UI is checked separately. Source publication uses only the explicitly approved14text/configuration files.
