@@ -148,7 +148,7 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
 - [x] The website is intuitive: a new visitor, without coaching, can find how to
   run the method. Record the visitor path and starting conditions; site entry
   has no separate 15-second pass/fail deadline.
-- [ ] **Mandatory for every run:** first observed actual method-driven physical
+- [x] **Mandatory for every run:** first observed actual method-driven physical
   YAM motion occurs both within **15 seconds after the startup move to Home
   completes** and within **30 seconds after the Run/Start click excluding
   evidenced queue-admission waiting**, using the boundaries below (including a
@@ -157,12 +157,12 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
   excluded queue seconds and the queue-adjusted Run time for every run; a sampled
   demonstration is insufficient. Apply only the documented GPU-launch or
   research-grounded exceptions below.
-- [ ] Every meaningful wait after a website action is immediately explained in
+- [x] Every meaningful wait after a website action is immediately explained in
   a persistent inline status/progress area at that action (below Run in the run
   panel for launches). Show the current stage, a plain-language reason and real
   stage completion, with honest failure/stall status and available recovery.
   Verify the detailed wait-stage behavior below.
-- [ ] Before marking the integration complete or reporting it done, open the
+- [x] Before marking the integration complete or reporting it done, open the
   deployed website and perform a final end-to-end physical YAM run through its
   normal user interface. Verify every completion requirement against that
   deployment and record evidence; unmet or unverified requirements block
@@ -347,16 +347,29 @@ before any completion claim.
 
 ## Integration and evidence
 
-- Public website: https://cag-molmoact-blupe.andlyu.chatgpt.site/
-- Public source: https://github.com/andlyu/cag-blupe
-- Actual method: MolmoAct2 + CAG-inspired guidance, experimental port; baseline also available. No task-success improvement established.
-- Runtime and model revisions: dependency.lock.json.
-- Identity: Andrew, human; assistant-operated normal-UI verification at his request. Private email confirmed through the normal queue flow, never included in this repository. Optional emailed video off.
-- Scope: YAM1 both arms, guided strength0.15,60seconds, Put the black box into the bin. Existing queue, lease, readiness, motion limits, Stop and parking remain enabled.
-- Simulation: not applicable; this integration executes the policy on physical YAM hardware only.
-- Current validation:72focused Python tests and6subtests passed;346shared UI checks passed;4Site edge checks passed. These are local test results, not physical motion proof.
-- Current physical timing verification: pending cold/warm normal-UI tests against the revised15s post-Home and30s Run targets. Native timestamps do not alone verify visual motion.
-- Historical physical evidence: guided physical run ep_48f25716171945ed had12accepted/completed packets and165waypoint progress events; retained live-view and archived footage are available through the website. No box-placement success claim.
-- Public-visibility exceptions: none.
 
-Internal hosting details, private repository URLs, credentials, contact details, raw logs and local audit history are excluded from this public checklist.
+Public site: https://cag-molmoact-blupe.andlyu.chatgpt.site/
+
+Current label: **MolmoAct2+CAG variant**. Final runtime1f691b4; Site v14/source58f9958. Confirmed Andrew, human; assistant-operated normal-UI tests recorded separately. All three requests selected1min=60s, YAM1 both arms, guided0.15, Put the black box into the bin. No safeguards changed. No task-success or CAG-improvement claim.
+
+| Run | Full Run to visible motion by | Native Home to visible motion by | Queue wait | GPU worker startup | Adjusted Run | Outcome |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| cold / ep_a8f48ace8e124a6e | 204.209s | 12.741s | 10.521s | 179.432s | 14.255s | GPU worker-launch exception / post-Home pass |
+| warm / ep_1cc73c72589c4946 | 25.082s | 12.729s | 10.417s | 0.000s | 14.665s | normal pass |
+| final / ep_41e88618ee2946de | 25.104s | 11.751s | 11.255s | 0.000s | 13.849s | normal pass |
+
+The visual times are conservative upper bounds using actual screenshot completion after manually inspecting wrist/arm departure from the observed settled Home pose. The capture includes Home/preparation before method onset. Native Home/admission events and first-action progress distinguish the two; progress timestamps alone are not counted as visible motion. UTC clocks are retained as recorded; no assumed video-delay or clock-offset subtraction. Video delay (~2–4s during method onset) remains in the visual times. Browser/native clock uncertainty is bounded in the follow-up receipt below.
+
+The cold worker was EXITED/THROTTLED before Run. RunPod later reported RUNNING; CUDA/model readiness ended the179.432s combined worker provision/startup interval. The UI explicitly showed Starting GPU/loading MolmoAct2 throughout, then retained start and ready timestamps. This is a cold worker-startup exception, not a normal <=30s full Run pass. GPU readiness preceded Home, so B_home=0. Queue and launch did not overlap (O_run=0); both full and adjusted clocks are retained in verification.json. No separate later warm model-load exception is claimed. Provider capacity delay is consistent with RunPod's documented THROTTLED state: https://github.com/runpod/docs/blob/main/serverless/workers/overview.mdx .
+
+Final run ep_41e88618ee2946de completed12real predictions,12accepted/completed packets and190waypoints, then native policy_runtime_timeout at the selected60s limit. Immediate replay opened with Andrew · MolmoAct2+CAG variant and playable60.75s actual camera video. Earlier cold/warm attempts later stopped on joint_1_outside_limits; those rejected chunks had zero progress, and the real failure remains shown. Native post-run status confirmed DISABLED, both arms parked at zero, torque-off verified and no lease authorization.
+
+The timestamped screen captures are sampled UI screenshots with real intervals; frames are held across documented capture gaps, not continuous screen video. Public-safe movie crops omit only the private identity-field band. The separate final-replay.webm is the actual continuous live-camera viewing copy with pauses/delay retained, not a simulation. Raw full screenshots and journals remain in private local work evidence.
+
+Checks:72focused Python tests +6subtests passed1.40s;347UI checks passed674ms; model-label follow-up58Python tests passed1.02s and347UI checks716ms;4Site edge checks passed68ms. An initial PATH collection failure and one missed completed-label mapping were corrected and rerun. Earlier repository-wide ASPIRE failures are outside these focused checks; no repository-wide all-green claim.
+
+Visitor path: existing in-app browser session, editable Andrew/name and confirmed private email, task in the visible quick prompt, Run, inline availability/queue/Home/action stages, immediate replay. Public audience verified by native Sites access configuration; source repository uses public GitHub visibility. Previous retained runs selectable from All runs/local saved live views; no simulation executes in this integration. Older runs retain their historical criteria and evidence; these three are the runs after adoption of the revised timing contract.
+
+Current checklist15/15 checked for the deployed integration and these scoped revised-contract tests, with the documented cold worker-launch exception. This is not a claim of box-placement success, unrestricted safety acceptance, or a green repository-wide suite. Private credentials, email, hosting internals and raw audit history are excluded.
+
+Post-run read-only native clock measurement bounded native-minus-local UTC offset at +0.047 to +1.102s (1.055s SSH round trip). Conservatively adding the full upper bound makes post-Home visual bounds13.843s cold,13.831s warm and12.853s final, all below15s. No clock offset or live-view delay was subtracted to improve a result. This bound assumes no intervening clock step between run and the follow-up measurement.

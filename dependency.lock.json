@@ -1,6 +1,6 @@
 {
   "shared_repository": "https://github.com/andlyu/blupe-remote-bots.git",
-  "shared_revision": "dd8c366280d74541ec9e1a5ab57568928e14ca6b",
+  "shared_revision": "1f691b446cb927020e1f5913138f77c068908cb0",
   "shared_branch": "codex/cag-molmoact-comparison",
   "model": "allenai/MolmoAct2-BimanualYAM",
   "model_revision": "8dcbed66f2380e4393189c303ea72488eb9e63c2",

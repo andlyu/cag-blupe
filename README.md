@@ -1,55 +1,34 @@
-# Completion Aware Guidance with MolmoAct2 on BluPe
+# MolmoAct2+CAG variant on BluPe
 
-[Open the website](https://cag-molmoact-blupe.andlyu.chatgpt.site/) to run MolmoAct2 baseline or MolmoAct2 + CAG-inspired guidance on the physical YAM1 arms. Confirm the editable name/email, select a task and Run. Guided mode and a 60-second run are the defaults. Stop, queue admission and native hardware limits remain in the existing BluPe controller.
+[Run the public demo](https://cag-molmoact-blupe.andlyu.chatgpt.site/) · [Public source](https://github.com/andlyu/cag-blupe) · [Completion checklist](COMPLETION-CHECKLIST.md)
 
-**Physical execution and immediate replay work. Full harness completion remains open: 13 of 15 requirements are verified.** The strict site-entry and every-run timing requirements remain unchecked; the website and reviewed source are public. See the [complete checklist and historical evidence](COMPLETION-CHECKLIST.md).
+Run MolmoAct2 baseline or **MolmoAct2+CAG variant** on the physical YAM1 arms. Confirm your editable name/email, enter a task and press Run. Guided strength0.15 and1minute are the defaults. Queue admission, native motion limits, Stop and normal parking remain enabled. The checkpoint identity is separately shown as allenai/MolmoAct2-BimanualYAM.
 
-The final cold-start test on October 31, 2026 UTC, as Andrew, completed 12 action packets and 165 waypoint progress events. Its actual live-camera replay was playable 57 ms after the browser observed completion, and remained playable after reload. A previous run's retained native recording also played. Box-placement success and improved completion from guidance have not been established.
+## Startup and timing
 
-## GPU availability and progress
+Run immediately explains GPU availability checking. A cold RunPod worker shows Starting GPU/loading MolmoAct2 throughout startup, then retains its real start/ready timestamps and elapsed time. Warm GPUs do not claim a launch exception. Robot admission, settled Home and first-action preparation have separate statuses. Native progress is not represented as visual motion proof.
 
-RunPod endpoint `97wo1fy10wrd0e` is a persistent on-demand service with no trial expiry, zero minimum workers, one maximum worker and a 300-second idle timeout. Run starts the GPU when cold. The page immediately explains GPU startup below Run, confirms real readiness, then shows preparation and execution. Stop cancels startup before queue admission. No robot lease is acquired until inference is ready.
+The current targets are actual method motion within15 seconds after settled startup Home and30 seconds after Run, with evidenced queue admission waiting accounted separately. Full clocks remain visible in the audit. Only evidenced cold worker-launch blocking time supports a GPU exception. The service uses zero minimum workers, one maximum worker and a300second idle timeout, with no trial expiry.
 
-The final cold launch took 14.249 seconds to GPU readiness and 30.866 seconds from Run to first waypoint telemetry. This is a documented GPU-launch exception to the per-Run target, **not** a <=15-second result. Site entry to first waypoint telemetry was 32.038 seconds; the harness does not exempt that measure. Telemetry is not a substitute for first-visible-motion footage. All elapsed clocks and prior misses are retained in the checklist.
+Final normal-UI test as Andrew: **ep_41e88618ee2946de**, current runtime pinned in dependency.lock.json. Visible method motion was confirmed by25.104s after Run and12.853s after Home including the conservative measured clock-offset bound. The run completed12real predictions,12accepted/completed packets and190waypoints, then stopped at its selected60second limit. Its immediate actual-camera replay was playable and retained with the exact model label. Both arms subsequently parked at zero with torque-off verified and no active lease.
+
+A separate warm test met the timing targets. The cold test needed179.432s of RunPod worker startup, explicitly shown in the UI; it is a documented launch exception, not a normal full Run-time pass. Earlier cold/warm tests later stopped safely when a prediction exceeded joint limits. Those failures remain recorded. **Box-placement success and a task-success improvement from CAG are not established.** The current15/15 harness audit and each run's full/adjusted clocks are in the checklist; this is not a repository-wide all-green claim.
 
 ## Method and source
 
-Both modes use the same pinned `allenai/MolmoAct2-BimanualYAM` checkpoint, BF16, seed 0 and ten flow steps. The guided variant ranks eligible task-text tokens by action-expert attention, selects the top quarter and scales their projected keys and values by `1 + alpha` across 36 layers. State, camera and non-task tokens are excluded. Strength zero delegates to pristine baseline attention exactly.
+Both modes use the same pinned checkpoint, BF16, seed0 and ten flow steps. The experimental guided port selects eligible task-text tokens by action-expert attention and scales their projected keys/values by1+alpha. State, camera and non-task tokens are excluded. Strength zero delegates to pristine baseline attention. This is an adaptation, not author code or an exact reproduction of the paper's original model experiments.
 
-This is an experimental adaptation of CAG to MolmoAct2, not author code or an exact reproduction of the paper's DreamZero/Fast-WAM experiments. A changed prediction does not establish better task completion.
-
-- [Shared implementation and deployment branch](https://github.com/andlyu/blupe-remote-bots/tree/codex/cag-molmoact-comparison/codex-runner/examples/cag_molmoact2)
-- [Draft implementation PR](https://github.com/andlyu/blupe-remote-bots/pull/157)
-- [Paper](https://arxiv.org/abs/2610.01559v2)
+- [Shared implementation](https://github.com/andlyu/blupe-remote-bots/tree/codex/cag-molmoact-comparison/codex-runner/examples/cag_molmoact2)
+- [Implementation PR](https://github.com/andlyu/blupe-remote-bots/pull/157)
+- [CAG paper](https://arxiv.org/abs/2610.01559v2)
 - [Shared harness](https://github.com/andlyu/blupe-remote-bots/blob/main/codex-runner/integration-harness/COMPLETION-CHECKLIST.md)
 
-`dependency.lock.json` pins the shared runtime and checkpoint. This repository contains the Sites edge, ASGI loader, deployment templates and integration checklist. Shared UI, policy adapter, guidance and inference worker remain in the shared repository. The physically verified policy revision is `c437c970`; the subsequent display-only revision `6a005757` adds the frozen approach to history cards and replay titles.
+The lockfile pins runtime/model source. This repository contains the Site edge, ASGI loader, deployment templates and audited checklist. No credentials, private email, private hosting URLs, raw logs or local audit history are included.
 
-## Replay and identity
+## Replay, identity and checks
 
-The browser records the actual displayed observer video during its own run, then opens a viewing copy immediately on completion. It preserves stream delay and is labeled accordingly; this is not simulation or a robot-clock source recording. IndexedDB retains the copy locally with method, task and runner name, without email. Save video provides a download. Native source recordings and previous-run history remain available independently. Frozen or missing camera frames are not represented as successful recordings; storage failures leave an honest download recovery path.
+The browser records its actual displayed live camera view and opens the viewing copy immediately after the run, preserving stream delay and pauses. IndexedDB retains it locally with model, task and runner, without email; Save video downloads it. Native recordings and previous-run history remain independently available. No simulation executes in this integration.
 
-Person-initiated runs retain the person's confirmed name. Assistant-operated verification is recorded separately from Andrew's identity. The private email is used only by the normal website/queue flow. Optional emailed run video was off during final verification.
+Person-initiated runs retain their confirmed human name. Assistant-operated verification is recorded separately from Andrew's identity. Email is submitted only through the normal website/queue flow; optional video email was off during these tests.
 
-## Deployment and validation
-
-The website and this reviewed source are public at Andrew’s explicit request. Earlier automatic denials were resolved by his task-specific publication instruction; native Sites access is public, policy revision2. Credentials, private email, logs and recordings are excluded from this source checkout. The native Site source remains independently versioned; shared runtime and checkpoint pins below are identical.
-
-The Sites Worker forwards only allowlisted runner cookies/CSRF headers through a server-keyed `/cag-site/` route. Sites account credentials are not forwarded. The dedicated `blupe-cag` Python service loads the exact locked shared checkout and uses private server-side credentials. Main playground and robot services are not restarted for CAG deployments.
-
-Focused validation: 87 Python tests and 343 browser checks passed. The broader suite reported 1,464 passed, 28 skipped and 11 failures: ten known ASPIRE baseline failures plus a missing Node PATH in the test environment. The transport test passed when rerun with Node on PATH. This is not an all-green repository suite.
-
-Historical failed trials, timing misses and superseded verification results are preserved in the checklist rather than presented as the current service state.
-
-
-## Startup delay beyond the GPU
-
-The final cold run spent14.249s launching theGPU, then16.382s before first waypoint telemetry. The main non-GPU interval was11.837s native admission/driver initialization/Home/first observation. Fresh feedback took0.828s, remaining camera capture1.670s, inference HTTP0.969s (GPU compute0.523s), and result-to-waypoint0.304s; queue admission afterGPU readiness added0.774s. Native drivers initialize sequentially and calibrate grippers on launch; a separate offline profile gives3.6s for zero-to-Home under current limits. This is not a claim that all non-GPU delay is acceptable or that strict15-second visible motion passes. No hardware safeguard was relaxed. Live video also has disclosed stream delay.
-
-A later native Session API disconnect temporarily paused YAM1’s automatic queue. It recovered independently: the latest normal harness status confirms parked, torque verified off, feedback available and automatic queue enabled. Our parking attempt was guarded before any write, so this follow-up sent no hardware command. GPU readiness and robot admission remain separate states.
-
-## Startup timing
-
-Run immediately shows GPU availability checking. A proven cold RunPod endpoint shows Starting GPU/loading MolmoAct2 throughout launch, then retains actual start/ready timestamps and duration. Existing or unknown GPU capacity does not invent a launch exception. The normal queue, native all-arm Home completion and first-action preparation have separate statuses. Completed startup stages remain visible after the run.
-
-Timing targets are actual method motion within15 seconds of settled startup Home and30 seconds of Run (with evidenced queue admission waiting accounted separately). Full clocks are retained; only evidenced cold GPU blocking time can support a launch exception. Native action progress alone is not visual motion proof. See COMPLETION-CHECKLIST.md for current evidence and any unchecked items.
+Checks passed:72focused Python tests+6subtests,347shared UI checks,4Site edge checks; the label follow-up passed58Python tests and347UI checks. Earlier broader-suite ASPIRE failures were not fixed or claimed green by this task. See the checklist for precise outcomes, exceptions and timing uncertainty.
