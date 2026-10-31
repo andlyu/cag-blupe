@@ -128,11 +128,21 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
   for that person. Record execution mode (such as `automated test`) and actual
   approach separately from human identity. Genuinely unattended/system activity
   has an explicit system identity; never fabricate a person's name or email.
-- [x] A person can use the website to run the integrated paper's method on
+- [ ] Every advertised control primitive passes the offline command-contract
+  gate through the actual parser/generator/serializer and canonical validator,
+  including measured fractional starts, numeric endpoints, invalid-input and
+  zero-dispatch failure tests. A required CI/release-preflight result and exact
+  source/dependency revisions are retained. Follow [the control contract](https://github.com/andlyu/blupe-remote-bots/blob/main/codex-runner/integration-harness/CONTROL-CONTRACT.md).
+- [ ] Task acceptance matches the advertised capability and tested deployment.
+  A representative physical task exercises the required primitives and verifies
+  the requested object/result state; a narrower smoke test is labelled as such.
+  Relevant failures or changed control code reopen affected requirements and
+  the current passed/total display, preserving earlier results as history.
+- [ ] A person can use the website to run the integrated paper's method on
   physical YAM robots/arms. Record a verified physical execution of that method.
-- [x] The actual physical arms are visible live on the website while the method
+- [ ] The actual physical arms are visible live on the website while the method
   runs, so a visitor can see that it is executing on real hardware.
-- [x] Immediately after a run finishes, the person can replay that just-completed
+- [ ] Immediately after a run finishes, the person can replay that just-completed
   physical YAM execution through the website, with retained footage showing the
   actual arms executing the integrated method.
 - [x] The person can browse/select previous runs on the website and replay their
@@ -145,10 +155,7 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
   Clearly label simulation content to distinguish it from physical-arm footage.
   If nothing executes in simulation, record an explicit not-applicable
   explanation instead of claiming simulation review.
-- [x] The website is intuitive: a new visitor, without coaching, can find how to
-  run the method. Record the visitor path and starting conditions; site entry
-  has no separate 15-second pass/fail deadline.
-- [x] **Mandatory for every run:** first observed actual method-driven physical
+- [ ] **Mandatory for every run:** first observed actual method-driven physical
   YAM motion occurs both within **15 seconds after the startup move to Home
   completes** and within **30 seconds after the Run/Start click excluding
   evidenced queue-admission waiting**, using the boundaries below (including a
@@ -162,24 +169,45 @@ and [Auto-review context and denials](https://learn.chatgpt.com/docs/sandboxing/
   panel for launches). Show the current stage, a plain-language reason and real
   stage completion, with honest failure/stall status and available recovery.
   Verify the detailed wait-stage behavior below.
-- [x] Before marking the integration complete or reporting it done, open the
+- [ ] Before marking the integration complete or reporting it done, open the
   deployed website and perform a final end-to-end physical YAM run through its
   normal user interface. Verify every completion requirement against that
   deployment and record evidence; unmet or unverified requirements block
   completion.
 
-## Verify the visitor path
+## Verify commands and numeric boundaries
 
-Record initial navigation (`t_entry`), the visitor's starting state and test
-conditions, including browser/session/network, identity entry or confirmation,
-queue and robot readiness. Keep the website usable without coaching. Site entry
-is contextual evidence, not a separate timed pass/fail gate.
+Read [CONTROL-CONTRACT.md](https://github.com/andlyu/blupe-remote-bots/blob/main/codex-runner/integration-harness/CONTROL-CONTRACT.md) before physical runs and before
+completion, including when an integration retains an older working checklist.
+The installer distributes that contract independently of preserved evidence.
+Its engineering gates are mandatory; they add no authorization/approval step.
 
-Keep a timed screen recording showing the visitor's actions, the Run click,
+Require actual command-path regression tests and pre-dispatch validation, exact
+validated interpolation endpoints, strict rejection of invalid inputs, preserved
+hardware safeguards and an actionable distinction between local input rejection
+and physical safety stops. A test-only accepting mock cannot replace the real
+deployed packet validator. Retain a failing packet and red-to-green reproduction
+for every repair. Wire the tests into CI or the release preflight.
+
+For advertised pick-and-place, verify the relevant approach/grasp/lift/transfer/
+release/withdrawal sequence and fresh evidence of the object outcome. Passing
+joint motion does not certify the untested sequence. Tie each claim to a task,
+capability, source revision and evidence; invalidate affected current passes
+after a relevant new failure. Installing this document is not test evidence.
+
+## Verify normal UI execution
+
+Site entry (`t_entry`), starting state and browser/session/network may be
+recorded as optional diagnostic context. An agent can perform verification
+through the normal UI.
+
+Keep a timed screen recording showing the UI actions, the Run click,
 startup Home completion (or no-Home readiness) and live physical arms beginning
 the integrated method, linked to the matching run. Correlate recorded UI/physical
 events with lifecycle logs on a common timeline; document any clock offset or
 measurement uncertainty. Backend timing alone cannot verify physical onset.
+Visual timing evidence may use retained accessible recording/verification links;
+a local download is not required.
 
 ## Verify every Run and startup Home
 
@@ -325,16 +353,36 @@ percentages, ETA or completion, or expose irrelevant infrastructure internals.
 UI transparency alone grants no exemption; only the documented GPU-launch
 blocking interval qualifies under the exception above, with neither clock reset.
 
+## Verify retained replays
+
+Open the retained recording through the website, confirm actual playback and
+appropriate seeking, and match it to the just-completed or selected historical
+physical run. Record the matching run reference/link and observed verification
+result. A link alone is insufficient.
+
+This does not require pressing **Save video**, downloading/exporting video to the
+agent's filesystem, making duplicate local copies or bundling videos in outputs.
+Omit optional local downloads from routine acceptance work; they are not a
+completion requirement and must not create an approval or needs-input blocker.
+Download locally only when explicitly requested or concretely necessary for the
+task. Required tool/platform permissions still apply; do not bypass or retry a
+denial through another route. Website/backend recording capture and retention
+remain required.
+
 ## Final verification before completion
 
 Open the deployed website and its associated source repository. Use the normal
-visitor flow to join, run the integrated method on physical YAMs and watch the
-actual arms live. Check the unchanged 15-second post-Home measure and the
+website controls to join, run the integrated method on physical YAMs and watch the
+actual arms live. First verify the required command-contract CI/release checks;
+choose a representative task covering the advertised primitives and verify its
+actual result. Reconcile later failures and changed control code with current
+acceptance status instead of carrying forward a stale smoke-test pass.
+Check the unchanged 15-second post-Home measure and the
 30-second Run/Start-to-motion budget excluding evidenced queue-admission wait.
 Keep fixed boundaries, full elapsed times, queue entry/admission/excluded seconds
 and queue-adjusted time; verify any GPU-launch exception uses the queue/GPU
 union without double subtraction. Check actual queue-to-admitted-to-preparation
-inline stages; site entry remains context only. Check approach/runner identities,
+inline stages; site entry is optional context. Check approach/runner identities,
 replay of the just-completed run and selection/replay of previous runs. Review
 every checklist item against current evidence, including public visibility and
 actual user attribution in policy/model tests, with execution mode separate.
@@ -347,10 +395,81 @@ before any completion claim.
 
 ## Integration and evidence
 
+- Paper / method (link and version):
+- Final verification (reviewer/date, tested website URL and deployed revision,
+  physical run reference):
+- Final checklist review (evidence for every item, replay links/timings, unmet
+  items and explicit exceptions):
+- Command-contract evidence (advertised primitives/arms, units/frames/ranges,
+  actual packet generator/serializer/validator revisions, required CI/preflight
+  command/result and endpoint/interior/invalid-input/zero-dispatch coverage):
+- Failure regressions (sanitized packet/starting state, dispatch classification,
+  red-to-green proof, unchanged safety checks and deployed repair revision):
+- Representative task acceptance (capability/task, approach/grasp/lift/transfer/
+  release/withdrawal where applicable, fresh verified outcome, exclusions and
+  current requirements reopened by later failures or changed control code):
+- Actual approach name / website label evidence:
+- Human join evidence (name/email collection or confirmation, prefilled defaults
+  and edits to both fields):
+- Run context evidence (run ID, approach and runner identity; website attribution):
+- User-initiated test evidence (run ID, confirmed human runner, actual approach,
+  separate execution mode; editable defaults and missing-name confirmation):
+- Unattended/system activity evidence (explicit system identity, execution mode
+  and actual approach; no fabricated person):
+- Wait-status evidence (action/run reference, immediate inline visibility,
+  ongoing stage/reason and real completion transitions):
+- GPU-startup UI evidence (startup shown after Run, actual readiness confirmed
+  before loading/running, completed stages and matching lifecycle evidence):
+- Failure/stall status and available recovery evidence:
+- Website URL:
+- Website source repository URL / deployed revision:
+- Public-visibility exceptions (write "none", or the affected website/repository,
+  explicit exception, reason and approval reference):
+- Physical-test authorization/scope (source path/heading or commit URL, website
+  and queue/run backend origins, station/arms, confirmed runner identity fields,
+  method/task, duration, expected motion and recording/replay destination):
+- Approval-context evidence (surfaced notice and escalation wording, applicable
+  user invocation/selecting instruction and harness contract version/scope,
+  review decision/rationale if required; redact private email from public evidence):
+- Physical execution (date, method/configuration, YAM station/arm IDs, run ID):
+- Live physical arm footage (website location and evidence link):
+- Just-completed replay URL / matching run reference / immediate availability
+  and observed playback/seeking result:
+- Previous-run browser URL / selected prior run reference / replay link and
+  observed playback/seeking result:
+- Simulation review (corresponding run reference, website review link, what ran
+  and its results, suitable replay/visualization/outputs, clear simulation label;
+  or explicit not-applicable explanation if nothing executes in simulation):
+- Per-run timing verification (tester/date, browser/session/network and robot
+  readiness; evidence for every run in the timing table above):
+- Optional diagnostic context (site entry `t_entry`, starting state and
+  browser/session/network):
+- `t_run` / `t_home` / `t_motion`, full Run-to-motion and post-Home-to-motion
+  seconds, queue-adjusted Run seconds and separate target outcomes:
+- Queue evidence (`t_queue` / `t_admit`, matched run/request/session/lease IDs,
+  lifecycle links and persistent inline stages), excluded `Q_run` seconds; or
+  evidenced already-admitted/no-wait with zero exclusion:
+- Matched settled Home completion evidence for participating arms, or no-Home
+  reason and earliest robot-ready timestamp/evidence (already ready: Run time):
+- GPU launch start/ready/full interval and inline UI/lifecycle evidence, `B_run`
+  / `B_home`, queue/GPU overlap `O_run`, excluded union, adjusted calculations and
+  exception outcome if applicable (otherwise "none"):
+- Timed screen recording / matching physical run evidence and clock correlation:
+- Remaining gaps:
+
+## Current deployment audit — zero-CAG parity revision
+
+Runtime14b11898aaec9624835782c676a254f8c8d21549. Public Site and companion source remain public. Andrew is the confirmed human identity; fixed-input tests were assistant-operated and dispatched no robot commands. [Parity evidence](PARITY.md) records the four GPU cases, pristine main-style startup check, exact adapter request/packet comparison and test outcomes.
+
+Current status9/16 checked. The command-contract gate, representative physical task acceptance, current physical execution/live-motion/replay proof, current motion timing and final physical UI run remain open. Earlier physical evidence below is retained as history and does not verify the changed input/sampling configuration. No simulation executes (explicit N/A). Editable identity, method naming, source/public access, existing history and wait-status behavior remain supported by the prior UI evidence and current page inspection. Overall integration completion is not claimed.
+
+## Historical integration evidence
+
+
 
 Public site: https://cag-molmoact-blupe.andlyu.chatgpt.site/
 
-Current label: **MolmoAct2+CAG variant**. Final runtime1f691b4; Site v14/source58f9958. Confirmed Andrew, human; assistant-operated normal-UI tests recorded separately. All three requests selected1min=60s, YAM1 both arms, guided0.15, Put the black box into the bin. No safeguards changed. No task-success or CAG-improvement claim.
+Historical label: **MolmoAct2+CAG variant**. Historical runtime1f691b4; Site v14/source58f9958. Confirmed Andrew, human; assistant-operated normal-UI tests recorded separately. All three requests selected1min=60s, YAM1 both arms, guided0.15, Put the black box into the bin. No safeguards changed. No task-success or CAG-improvement claim.
 
 | Run | Full Run to visible motion by | Native Home to visible motion by | Queue wait | GPU worker startup | Adjusted Run | Outcome |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -370,6 +489,6 @@ Checks:72focused Python tests +6subtests passed1.40s;347UI checks passed674ms; m
 
 Visitor path: existing in-app browser session, editable Andrew/name and confirmed private email, task in the visible quick prompt, Run, inline availability/queue/Home/action stages, immediate replay. Public audience verified by native Sites access configuration; source repository uses public GitHub visibility. Previous retained runs selectable from All runs/local saved live views; no simulation executes in this integration. Older runs retain their historical criteria and evidence; these three are the runs after adoption of the revised timing contract.
 
-Current checklist15/15 checked for the deployed integration and these scoped revised-contract tests, with the documented cold worker-launch exception. This is not a claim of box-placement success, unrestricted safety acceptance, or a green repository-wide suite. Private credentials, email, hosting internals and raw audit history are excluded.
+The earlier15/15 count applied only to that earlier harness revision and deployment, with the documented cold worker-launch exception. This is not a claim of box-placement success, unrestricted safety acceptance, or a green repository-wide suite. Private credentials, email, hosting internals and raw audit history are excluded.
 
 Post-run read-only native clock measurement bounded native-minus-local UTC offset at +0.047 to +1.102s (1.055s SSH round trip). Conservatively adding the full upper bound makes post-Home visual bounds13.843s cold,13.831s warm and12.853s final, all below15s. No clock offset or live-view delay was subtracted to improve a result. This bound assumes no intervening clock step between run and the follow-up measurement.
