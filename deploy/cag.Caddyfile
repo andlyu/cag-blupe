@@ -1,0 +1,16 @@
+# Render CAG_EDGE_KEY from the secret store into a mode-0640 root:caddy include.
+# The production include requires this key, then strips the /cag-site prefix.
+# Requests without it receive 404 and cannot reach the Python runner.
+# The literal secret is never stored in source.
+@cagSite path /cag-site/*
+handle @cagSite {
+    @cagEdge header X-CAG-Edge-Key {$CAG_EDGE_KEY}
+    handle @cagEdge {
+        uri strip_prefix /cag-site
+        reverse_proxy 127.0.0.1:8922 {
+            header_up Host cag-molmoact-blupe.andlyu.chatgpt.site
+            header_up -X-CAG-Edge-Key
+        }
+    }
+    respond 404
+}

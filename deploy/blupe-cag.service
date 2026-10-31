@@ -1,0 +1,29 @@
+[Unit]
+Description=CAG / MolmoAct2 BluPe research website
+After=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/blupe-cag/site
+EnvironmentFile=/etc/blupe-cag.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=YAM_SOCIAL_DATABASE=/var/lib/blupe-cag/contacts.sqlite3
+Environment=YAM_RUN_NAMES_DATABASE=/var/lib/blupe-cag/run-names.sqlite3
+Environment=YAM_SUBMISSION_DATABASE=/var/lib/blupe-cag/submissions.sqlite3
+ExecStart=/home/ubuntu/aspire-releases/hosted-reset-9967fec-20261019-01a15245/venv/bin/python -m uvicorn app:create_app --factory --host 127.0.0.1 --port 8922 --workers 1 --no-access-log --no-proxy-headers
+Restart=on-failure
+RestartSec=5
+StateDirectory=blupe-cag
+NoNewPrivileges=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+MemoryMax=384M
+MemorySwapMax=0
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
