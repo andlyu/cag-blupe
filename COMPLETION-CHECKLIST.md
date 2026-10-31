@@ -502,3 +502,6 @@ One fresh read-only three-camera probe took4.119s; fresh source ages were0.095/1
 At follow-up inspection, a separate Session API disconnect had left YAM1 holding/settled withAPI connected again but automatic queue paused. No policy failure was attributed toGPU. Normal harness parking/readiness restoration is recorded in the local follow-up receipt; no automatic timed-out movement retry. Source/runtime policy unchanged in this investigation.
 
 Anonymous Python HTTP probe was rejected by Cloudflare error1010; it does not independently verify anonymous browser rendering. Native Sites access is confirmedpublic; browser UI is checked separately. Source publication uses only the explicitly approved14text/configuration files.
+
+
+Readiness follow-up: the normal harness zero attempt returnedwrite_started=false because the station had independently resumed its queue. The next ordinary harness status returnedok=true,modeDISABLED,parked=true,torque_off_verified=true,feedback_available=true,auto_queue_enabled=true, “Both physical arms parked at joint zero and torque-disabled.” No parking/queue mutation was sent by this task. This supersedes the transient paused-state observation above; do not retry movement after a successful parked receipt.
